@@ -44,9 +44,9 @@ Bu proje, **Web Teknolojileri** dersi kapsamında geliştirilmiş bir yabancı d
 
 ## 👥 Hazırlayanlar
 
-- Furkan Esim  
-- Emir Can Gök  
-- Polat Üstün
+- Furkan Esim  - 230229042
+- Emir Can Gök  - 230229054
+- Polat Üstün - 230229057
 
 📅 **Teslim Tarihi:** 21.06.2025  
 📘 **Ders:** Web Teknolojileri
