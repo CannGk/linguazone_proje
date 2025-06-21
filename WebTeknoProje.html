@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+
+<html lang="tr"><!-- Sayfanın dili Türkçe olarak ayarlanıyor --><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!-- Türkçe karakterlerin doğru görünmesini sağlar -->
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/> <!-- Sayfa mobil uyumlu olacak şekilde ölçekleniyor -->
+<title>LinguaZone</title> <!-- Tarayıcı sekmesinde görünen başlık -->
+<!-- Rubik yazı tipini Google Fonts üzerinden yüklüyoruz -->
+<link href="./LinguaZone_files/css2" rel="stylesheet"/>
+<style>
+    /* Tüm elemanlar için margin ve padding sıfırlanıyor, kutu modeli ayarlanıyor, yazı tipi Rubik olarak belirleniyor */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    /* Sayfa arka planı rengi ve yazı rengi*/
+    body {
+      background-color: #f0f4f8;
+      color: #263238;
+    }
+
+    /* Sayfanın üst kısmındaki headerın tasarımı */
+    header {
+      background-color: #003c8f; /* Arka plan */
+      color: white; /* Yazı rengi */
+      padding: 20px;
+      display: flex; /* Elemanlar yatay hizalanıyor */
+      justify-content: space-between; /* Başlık ve menü kutusu iki yana itiliyor */
+      align-items: center; /* Yazıların ortalanması sağlandı */
+    }
+
+    /* Başlık yazısının boyutu */
+    header h1 {
+      font-size: 24px;
+    }
+
+    /* Açılır menü kutusunun görünümü */
+    nav select {
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 15px;
+    }
+
+    /* Ana görsel alan (hero) tasarımı */
+    .hero {
+      background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1470&q=80'); /* Arka plan görseli */
+      height: 280px;
+      background-size: cover; 
+      background-position: center; 
+      display: flex; 
+      justify-content: center;
+      align-items: center;
+      color: white; 
+      text-shadow: 1px 1px 4px black; 
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    /* Dillerin bulunduğu kutuların düzeni (satır satır yan yana, taşarsa alta geçer) */
+    .languages {
+      display: flex; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      gap: 20px; 
+      max-width: 960px; 
+      margin: 30px auto; 
+    }
+
+    /* Dil kartlarının boyut ve görünüm ayarları */
+    .lang-card {
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(to bottom right, #e1f5fe, #b3e5fc); 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      transition: transform 0.3s; 
+    }
+
+    /* Kartların üzerine gelindiğinde yakınlaştırma efekti */
+    .lang-card:hover {
+      transform: scale(1.05); /* Üstüne geldiğinde %5 büyütme sağlanıyor */
+    }
+
+    /* Kart içindeki bayrak ikonunun boyutu ve konumu */
+    .lang-card img {
+      width: 48px;
+      height: auto;
+      margin-bottom: 10px; 
+    }
+
+    /* Kart içindeki yazı kalın görünsün */
+    .lang-card p {
+      font-weight: bold;
+    }
+
+    /* İçerik bölümleri (kartlar, sınav vs.) varsayılan olarak gizli */
+    .section {
+      display: none;
+      background: white;
+      margin: 30px auto;
+      max-width: 900px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* Seçilen içerik görünür olur */
+    .section.active {
+      display: block;
+    }
+
+    /* İçerik bölüm başlıkları */
+    .section h2 {
+      font-size: 20px;
+      color: #003c8f; 
+      border-bottom: 1px solid #b3e5fc; 
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+
+    /* Sayfa alt kısmı (footer) */
+    footer {
+      background: #003c8f; 
+      color: white; 
+      text-align: center; 
+      padding: 16px;
+      margin-top: 50px; 
+    }
+    /* Seçilen dil kartına görsel belirginlik ekle */
+.selected-lang {
+  outline: 4px solid #003c8f;
+  outline-offset: -4px;
+}
+
+/* Seçilen seviye kartına görsel belirginlik ekle */
+.selected-level {
+  outline: 4px solid #4caf50;
+  outline-offset: -4px;
+}
+
+  </style>
+
+<style>
+  .homepage-only { display: none; }
+</style>
+
+
+<script>
+  function toggleHomeSections() {
+    const isHome = document.querySelector('nav select').value === "";
+    document.querySelectorAll('.homepage-only').forEach(el => {
+      el.style.display = isHome ? 'block' : 'none';
+    });
+  }
+  document.addEventListener('DOMContentLoaded', toggleHomeSections);
+</script>
+
+</head>
+<body>
+<!-- Sayfanın en üst kısmında yer alan başlık ve açılır menü -->
+<header>
+<h1>LinguaZone</h1>
+<nav>
+
+<select onchange="
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      if(this.value) document.getElementById(this.value).classList.add('active');
+      toggleHomeSections();
+    ">
+<option value="">Bölüm Seç</option>
+<option value="cards">📚 Kelime Kartları</option>
+<option value="quiz">🧠 Sınav</option>
+<option value="reading">📖 Okuma</option>
+<option value="video">🎬 Video Anlatımlar</option>
+</select>
+</nav>
+</header>
+<!-- Siteye giren kullanıcıyı karşılayan, slogan içeren ana görsel alan -->
+<div class="hero">
+  🌍 Yeni Diller Keşfet • Eğlenerek Öğren • Pratik Yap
+</div>
+<!-- Sitenin temel amacını kullancıya vermek için açıklayıcı bilgi bölümü -->
+<section style="max-width: 960px; margin: 30px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+<h2 style="color: #003c8f;">Neden Dil Öğrenmeliyiz?</h2>
+<p style="margin-top: 10px;">
+<strong>Dil öğrenmek, dünyayı anlamanın ve farklı kültürlerle bağ kurmanın en güçlü yollarından biridir.</strong><br/>
+    LinguaZone, farklı seviyelere uygun içerikleriyle dil öğrenimini eğlenceli ve pratik hâle getirir.<br/>
+    Kelime kartları, sesli alıştırmalar ve mini sınavlarla kendi hızınızda öğrenin, gelişiminizi takip edin.
+  </p>
+</section>
+<!-- Siteyi kullanmanın bazı avantajlarının sayıldığı bölüm -->
+<section id="homepage-advantages" class="homepage-only" style="max-width: 960px; margin: 30px auto; background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+<h2 style="color: #003c8f;">💡 LinguaZone'u Neden Kullanmalıyım?</h2>
+<ul style="list-style: none; padding: 0; margin-top: 20px; text-align: left;">
+<li style="margin-bottom: 12px;">✅ Seviyeye göre özelleştirilmiş kelime kartları</li>
+<li style="margin-bottom: 12px;">✅ Eğlenceli ve öğretici mini sınavlar</li>
+<li style="margin-bottom: 12px;">✅ Okuma parçalarıyla bağlam içinde öğrenme</li>
+<li style="margin-bottom: 12px;">✅ Video destekli anlatımlarla öğrenmeyi pekiştirme</li>
+<li style="margin-bottom: 12px;">✅ Mobil uyumlu, sade ve kullanıcı dostu tasarım</li>
+</ul>
+</section>
+<!-- Temsili kullanıcı yorumları -->
+<section id="homepage-testimonials" class="homepage-only" style="max-width: 960px; margin: 30px auto; background: #f9f9f9; padding: 30px 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.06);">
+<h2 style="color: #003c8f;">🗣️ Kullanıcı Yorumları</h2>
+<div style="margin-top: 20px;">
+<blockquote style="margin-bottom: 20px; font-style: italic;">"LinguaZone sayesinde İngilizce kelime dağarcığım çok gelişti. Sınavlar da çok faydalı!"<br/><strong>– Elif, Üniversite Öğrencisi</strong></blockquote>
+<blockquote style="margin-bottom: 20px; font-style: italic;">"Okuma parçaları harika. Her seviyeye uygun içerik olması çok hoşuma gitti."<br/><strong>– Mehmet, Lise Öğrencisi</strong></blockquote>
+<blockquote style="margin-bottom: 0; font-style: italic;">"Kızım Almanca öğrenmeye bu siteyle başladı, şimdi Almanca kitaplar bile okuyor!"<br/><strong>– Ayşe, Veli</strong></blockquote>
+</div>
+</section>
+<!-- Öğrenmek istenen dillerin görsel kartlarla sunulduğu bölüm -->
+<!-- Kullanıcının seviyesini seçebileceği seviye kartları -->
+<!-- Kullanıcı dil seçince class="selected-lang" eklenir -->
+<section class="languages" id="language-select" style="display: none;">
+<div class="lang-card" data-lang="en"><img alt="İngilizce" src="https://flagcdn.com/w80/gb.png"/><p>İngilizce</p></div>
+<div class="lang-card" data-lang="de"><img alt="Almanca" src="https://flagcdn.com/w80/de.png"/><p>Almanca</p></div>
+<div class="lang-card" data-lang="es"><img alt="İspanyolca" src="https://flagcdn.com/w80/es.png"/><p>İspanyolca</p></div>
+</section>
+<!-- Kullanıcı seviye seçince class="selected-level" eklenir -->
+<div id="level-cards" style="display: none; text-align: center; margin-top: 10px;">
+<h2 style="margin-bottom: 20px; color: #003c8f;">Hangi seviyede olduğunuzu düşünüyorsunuz?</h2>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+<div class="lang-card" data-level="beginner" style="background: linear-gradient(to bottom right, #fff3e0, #ffe0b2);">
+<p>Başlangıç</p><p>A1 - A2</p>
+</div>
+<div class="lang-card" data-level="intermediate" style="background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);">
+<p>Orta</p><p>B1 - B2</p>
+</div>
+<div class="lang-card" data-level="advanced" style="background: linear-gradient(to bottom right, #ede7f6, #d1c4e9);">
+<p>İleri</p><p>C1 - C2</p>
+</div>
+</div>
+</div>
+<!-- Kelime kartlarının bulunduğu bölüm -->
+<section class="section" id="cards">
+<h2>📚 Kelime Kartları</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu bölümde, dil öğreniminin temel yapı taşı olan kelimeleri görsel destekli kartlarla öğrenebilirsiniz.<br/>
+    Her kart, günlük hayatta sıkça kullanılan kelimeleri ve Türkçe karşılıklarını içerir.<br/>
+    Öğrenmek istediğiniz dili seçin, kelime dağarcığınızı adım adım geliştirin!
+  </p>
+<!-- 10 adet örnek kelime kartı -->
+<div class="languages">
+<div class="lang-card"><p><strong>Apple</strong></p><p>Elma</p></div>
+<div class="lang-card"><p><strong>House</strong></p><p>Ev</p></div>
+<div class="lang-card"><p><strong>Car</strong></p><p>Araba</p></div>
+<div class="lang-card"><p><strong>Book</strong></p><p>Kitap</p></div>
+<div class="lang-card"><p><strong>Friend</strong></p><p>Arkadaş</p></div>
+<div class="lang-card"><p><strong>Dog</strong></p><p>Köpek</p></div>
+<div class="lang-card"><p><strong>School</strong></p><p>Okul</p></div>
+<div class="lang-card"><p><strong>Water</strong></p><p>Su</p></div>
+<div class="lang-card"><p><strong>Sun</strong></p><p>Güneş</p></div>
+<div class="lang-card"><p><strong>Table</strong></p><p>Masa</p></div>
+</div>
+</section>
+
+<!-- Video anlatım içeriklerinin yer aldığı bölüm -->
+<section class="section" id="video" style="display: block !important;"><h2>Videolu Anlatım</h2><div style="text-align:center; margin-top:20px;"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="True" frameborder="0" height="315" src="https://www.youtube.com/embed/MMmOLN5zBLY" title="How to learn any language easily | Polyglot secrets" width="560"></iframe></div></section>
+<!-- Farklı diller ve seviyelere göre kelime kartları -->
+<!-- Başlangıç seviye ingilizce kartları -->
+<section class="section" id="cards-en-beginner">
+<h2>📚 İngilizce – Başlangıç Kelime Kartları</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu bölüm, İngilizce diline yeni başlayanlar için temel kelimeleri içerir.<br/>
+    Günlük yaşamda sıkça kullanılan sözcükleri öğrenerek sağlam bir başlangıç yapabilirsiniz.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Apple</strong></p><p>Elma</p></div>
+<div class="lang-card"><p><strong>Book</strong></p><p>Kitap</p></div>
+<div class="lang-card"><p><strong>Dog</strong></p><p>Köpek</p></div>
+<div class="lang-card"><p><strong>House</strong></p><p>Ev</p></div>
+<div class="lang-card"><p><strong>Chair</strong></p><p>Sandalye</p></div>
+<div class="lang-card"><p><strong>Water</strong></p><p>Su</p></div>
+<div class="lang-card"><p><strong>Table</strong></p><p>Masa</p></div>
+<div class="lang-card"><p><strong>Sun</strong></p><p>Güneş</p></div>
+<div class="lang-card"><p><strong>Friend</strong></p><p>Arkadaş</p></div>
+<div class="lang-card"><p><strong>School</strong></p><p>Okul</p></div>
+</div>
+</section>
+<!-- Kullanıcının öğrendiklerini test edebildiği sınav bölümü -->
+<!-- Başlangıç seviye İngilizce testi -->
+<section class="section" id="quiz-en-beginner">
+<h2>🧠 İngilizce – Başlangıç Seviyesi Sınav</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu mini test, başlangıç seviyesindeki temel kelime bilginizi ölçmek için hazırlanmıştır.<br/>
+    Her soru çoktan seçmelidir. Hazırsanız başlayalım!
+  </p>
+<form name="form1">
+<p>1. What is the meaning of "Book"?</p>
+<label><input name="q1" type="radio" value="Kalem"/> Kalem</label><br/>
+<label><input name="q1" type="radio" value="Kitap"/> Kitap</label><br/>
+<label><input name="q1" type="radio" value="Masa"/> Masa</label><br/>
+<label><input name="q1" type="radio" value="Kedi"/> Kedi</label><br/><br/>
+<p>2. What is "House" in Turkish?</p>
+<label><input name="q2" type="radio" value="Araba"/> Araba</label><br/>
+<label><input name="q2" type="radio" value="Ev"/> Ev</label><br/>
+<label><input name="q2" type="radio" value="Sandalye"/> Sandalye</label><br/>
+<label><input name="q2" type="radio" value="Güneş"/> Güneş</label><br/><br/>
+<p>3. Which one means "Elma"?</p>
+<label><input name="q3" type="radio" value="Table"/> Table</label><br/>
+<label><input name="q3" type="radio" value="Apple"/> Apple</label><br/>
+<label><input name="q3" type="radio" value="Pen"/> Pen</label><br/>
+<label><input name="q3" type="radio" value="Chair"/> Chair</label><br/><br/>
+<p>4. Choose the English word for "Su".</p>
+<label><input name="q4" type="radio" value="Water"/> Water</label><br/>
+<label><input name="q4" type="radio" value="Dog"/> Dog</label><br/>
+<label><input name="q4" type="radio" value="House"/> House</label><br/>
+<label><input name="q4" type="radio" value="Book"/> Book</label><br/><br/>
+<p>5. What is "Friend" in Turkish?</p>
+<label><input name="q5" type="radio" value="Kalem"/> Kalem</label><br/>
+<label><input name="q5" type="radio" value="Güneş"/> Güneş</label><br/>
+<label><input name="q5" type="radio" value="Arkadaş"/> Arkadaş</label><br/>
+<label><input name="q5" type="radio" value="Ev"/> Ev</label><br/><br/>
+<p>6. What is the opposite of "Cold"?</p>
+<label><input name="q6" type="radio" value="Hot"/> Hot</label><br/>
+<label><input name="q6" type="radio" value="Wet"/> Wet</label><br/>
+<label><input name="q6" type="radio" value="Dark"/> Dark</label><br/>
+<label><input name="q6" type="radio" value="Small"/> Small</label><br/><br/>
+<button onclick="checkQuiz('form1', 'quizResult1')" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;" type="button">Sınavı Bitir</button>
+<p class="quiz-result" id="quizResult1" style="font-weight: bold; margin-top: 20px;"></p>
+</form>
+</section>
+<!-- Orta seviye İngilizce testi -->
+<section class="section" id="cards-en-intermediate">
+<h2>📚 English – Intermediate Vocabulary Cards</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu orta seviye kelimeler günlük yaşam, eğitim ve seyahat için kelime dağarcığınızı genişletmenize yardımcı olacaktır.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Journey</strong></p><p>Seyahat</p></div>
+<div class="lang-card"><p><strong>Decision</strong></p><p>Karar</p></div>
+<div class="lang-card"><p><strong>Opinion</strong></p><p>Görüş</p></div>
+<div class="lang-card"><p><strong>Improve</strong></p><p>Geliştirmek</p></div>
+<div class="lang-card"><p><strong>Comfortable</strong></p><p>Rahat</p></div>
+<div class="lang-card"><p><strong>Surprise</strong></p><p>Sürpriz</p></div>
+<div class="lang-card"><p><strong>Borrow</strong></p><p>Ödünç almak</p></div>
+<div class="lang-card"><p><strong>Prefer</strong></p><p>Tercih etmek</p></div>
+<div class="lang-card"><p><strong>Invitation</strong></p><p>Davet</p></div>
+<div class="lang-card"><p><strong>Necessary</strong></p><p>Gerekli</p></div>
+</div>
+</section>
+<!-- İleri seviye İngilizce testi -->
+<section class="section" id="quiz-en-intermediate">
+<h2>🧠 English – Intermediate Level Quiz</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu altı çoktan seçmeli soruyla orta düzey kelime bilginizi test edin.
+  </p>
+<form name="form2">
+<p>1. What does "Journey" mean?</p>
+<label><input name="q1" type="radio" value="Rahat"/> Rahat</label><br/>
+<label><input name="q1" type="radio" value="Seyahat"/> Seyahat</label><br/>
+<label><input name="q1" type="radio" value="Kalabalık"/> Kalabalık</label><br/>
+<label><input name="q1" type="radio" value="Yemek"/> Yemek</label><br/><br/>
+<p>2. "Borrow" means...</p>
+<label><input name="q2" type="radio" value="Satın almak"/> Satın almak</label><br/>
+<label><input name="q2" type="radio" value="Kiralamak"/> Kiralamak</label><br/>
+<label><input name="q2" type="radio" value="Ödünç almak"/> Ödünç almak</label><br/>
+<label><input name="q2" type="radio" value="Vermek"/> Vermek</label><br/><br/>
+<p>3. What is the opposite of "Necessary"?</p>
+<label><input name="q3" type="radio" value="Optional"/> Optional</label><br/>
+<label><input name="q3" type="radio" value="Important"/> Important</label><br/>
+<label><input name="q3" type="radio" value="Useful"/> Useful</label><br/>
+<label><input name="q3" type="radio" value="Hard"/> Hard</label><br/><br/>
+<p>4. Which word means "Tercih etmek"?</p>
+<label><input name="q4" type="radio" value="Choose"/> Choose</label><br/>
+<label><input name="q4" type="radio" value="Prefer"/> Prefer</label><br/>
+<label><input name="q4" type="radio" value="Decide"/> Decide</label><br/>
+<label><input name="q4" type="radio" value="Suggest"/> Suggest</label><br/><br/>
+<p>5. What does "Invitation" mean?</p>
+<label><input name="q5" type="radio" value="Misafir"/> Misafir</label><br/>
+<label><input name="q5" type="radio" value="Davet"/> Davet</label><br/>
+<label><input name="q5" type="radio" value="Toplantı"/> Toplantı</label><br/>
+<label><input name="q5" type="radio" value="Hediye"/> Hediye</label><br/><br/>
+<p>6. "Opinion" means...</p>
+<label><input name="q6" type="radio" value="Bilgi"/> Bilgi</label><br/>
+<label><input name="q6" type="radio" value="Karar"/> Karar</label><br/>
+<label><input name="q6" type="radio" value="Görüş"/> Görüş</label><br/>
+<label><input name="q6" type="radio" value="Haber"/> Haber</label><br/><br/>
+<button onclick="checkQuiz('form2', 'quizResult2')" style="margin-top: 20px; padding: 10px 20px;" type="button">Finish Quiz</button>
+<p class="quiz-result" id="quizResult2" style="font-weight: bold; margin-top: 20px;">✔️ Doğru Sayısı: 1 / 6</p>
+</form>
+</section>
+<!-- İleri seviye İngilizce kelimeler -->
+<section class="section" id="cards-en-advanced">
+<h2>📚 English – Advanced Vocabulary Cards</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu ileri düzey kelimeler akademik, profesyonel ve kültürel bağlamlarda dil becerilerinizi geliştirecektir.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Achievement</strong></p><p>Başarı</p></div>
+<div class="lang-card"><p><strong>Comprehend</strong></p><p>Anlamak</p></div>
+<div class="lang-card"><p><strong>Evidence</strong></p><p>Kanıt</p></div>
+<div class="lang-card"><p><strong>Independence</strong></p><p>Bağımsızlık</p></div>
+<div class="lang-card"><p><strong>Significant</strong></p><p>Önemli</p></div>
+<div class="lang-card"><p><strong>Challenge</strong></p><p>Zorluk</p></div>
+<div class="lang-card"><p><strong>Environment</strong></p><p>Çevre</p></div>
+<div class="lang-card"><p><strong>Tradition</strong></p><p>Gelenek</p></div>
+<div class="lang-card"><p><strong>Community</strong></p><p>Topluluk</p></div>
+<div class="lang-card"><p><strong>Determine</strong></p><p>Belirlemek</p></div>
+</div>
+</section>
+<section class="section" id="quiz-en-advanced">
+<h2>🧠 English – Advanced Level Quiz</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu test, gerçek yaşam bağlamlarında kullanılan ileri düzey İngilizce kelime dağarcığınızı test etmenize yardımcı olur.
+  </p>
+<form name="form3">
+<p>1. What does "Achievement" mean?</p>
+<label><input name="q1" type="radio" value="Failure"/> Failure</label><br/>
+<label><input name="q1" type="radio" value="Success"/> Success</label><br/>
+<label><input name="q1" type="radio" value="Problem"/> Problem</label><br/>
+<label><input name="q1" type="radio" value="Risk"/> Risk</label><br/><br/>
+<p>2. What is the meaning of "Comprehend"?</p>
+<label><input name="q2" type="radio" value="To listen"/> To listen</label><br/>
+<label><input name="q2" type="radio" value="To understand"/> To understand</label><br/>
+<label><input name="q2" type="radio" value="To forget"/> To forget</label><br/>
+<label><input name="q2" type="radio" value="To explain"/> To explain</label><br/><br/>
+<p>3. Which word means "Kanıt" in English?</p>
+<label><input name="q3" type="radio" value="Tradition"/> Tradition</label><br/>
+<label><input name="q3" type="radio" value="Environment"/> Environment</label><br/>
+<label><input name="q3" type="radio" value="Evidence"/> Evidence</label><br/>
+<label><input name="q3" type="radio" value="Community"/> Community</label><br/><br/>
+<p>4. What is the opposite of "Independence"?</p>
+<label><input name="q4" type="radio" value="Freedom"/> Freedom</label><br/>
+<label><input name="q4" type="radio" value="Dependence"/> Dependence</label><br/>
+<label><input name="q4" type="radio" value="Success"/> Success</label><br/>
+<label><input name="q4" type="radio" value="Improvement"/> Improvement</label><br/><br/>
+<p>5. "Determine" means...</p>
+<label><input name="q5" type="radio" value="To ignore"/> To ignore</label><br/>
+<label><input name="q5" type="radio" value="To observe"/> To observe</label><br/>
+<label><input name="q5" type="radio" value="To decide or define"/> To decide or define</label><br/>
+<label><input name="q5" type="radio" value="To leave"/> To leave</label><br/><br/>
+<p>6. Which word is related to society?</p>
+<label><input name="q6" type="radio" value="Community"/> Community</label><br/>
+<label><input name="q6" type="radio" value="Challenge"/> Challenge</label><br/>
+<label><input name="q6" type="radio" value="Environment"/> Environment</label><br/>
+<label><input name="q6" type="radio" value="Determine"/> Determine</label><br/><br/>
+<button onclick="checkQuiz('form3', 'quizResult3')" style="margin-top: 20px; padding: 10px 20px;" type="button">Finish Quiz</button>
+<p class="quiz-result" id="quizResult3" style="font-weight: bold; margin-top: 20px;"></p>
+</form>
+</section>
+<section class="section" id="cards-en-advanced">
+<h2>📚 English – Advanced Vocabulary Cards</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu ileri düzey kelimeler akademik, profesyonel ve kültürel bağlamlarda dil becerilerinizi geliştirecektir.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Achievement</strong></p><p>Başarı</p></div>
+<div class="lang-card"><p><strong>Comprehend</strong></p><p>Anlamak</p></div>
+<div class="lang-card"><p><strong>Evidence</strong></p><p>Kanıt</p></div>
+<div class="lang-card"><p><strong>Independence</strong></p><p>Bağımsızlık</p></div>
+<div class="lang-card"><p><strong>Significant</strong></p><p>Önemli</p></div>
+<div class="lang-card"><p><strong>Challenge</strong></p><p>Zorluk</p></div>
+<div class="lang-card"><p><strong>Environment</strong></p><p>Çevre</p></div>
+<div class="lang-card"><p><strong>Tradition</strong></p><p>Gelenek</p></div>
+<div class="lang-card"><p><strong>Community</strong></p><p>Topluluk</p></div>
+<div class="lang-card"><p><strong>Determine</strong></p><p>Belirlemek</p></div>
+</div>
+</section>
+<section class="section" id="quiz-en-advanced">
+<h2>🧠 English – Advanced Level Quiz</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu test, gerçek yaşam bağlamlarında kullanılan ileri düzey İngilizce kelime dağarcığınızı test etmenize yardımcı olur.
+  </p>
+<form name="form4">
+<p>1. What does "Achievement" mean?</p>
+<label><input name="q1" type="radio" value="Failure"/> Failure</label><br/>
+<label><input name="q1" type="radio" value="Success"/> Success</label><br/>
+<label><input name="q1" type="radio" value="Problem"/> Problem</label><br/>
+<label><input name="q1" type="radio" value="Risk"/> Risk</label><br/><br/>
+<p>2. What is the meaning of "Comprehend"?</p>
+<label><input name="q2" type="radio" value="To listen"/> To listen</label><br/>
+<label><input name="q2" type="radio" value="To understand"/> To understand</label><br/>
+<label><input name="q2" type="radio" value="To forget"/> To forget</label><br/>
+<label><input name="q2" type="radio" value="To explain"/> To explain</label><br/><br/>
+<p>3. Which word means "Kanıt" in English?</p>
+<label><input name="q3" type="radio" value="Tradition"/> Tradition</label><br/>
+<label><input name="q3" type="radio" value="Environment"/> Environment</label><br/>
+<label><input name="q3" type="radio" value="Evidence"/> Evidence</label><br/>
+<label><input name="q3" type="radio" value="Community"/> Community</label><br/><br/>
+<p>4. What is the opposite of "Independence"?</p>
+<label><input name="q4" type="radio" value="Freedom"/> Freedom</label><br/>
+<label><input name="q4" type="radio" value="Dependence"/> Dependence</label><br/>
+<label><input name="q4" type="radio" value="Success"/> Success</label><br/>
+<label><input name="q4" type="radio" value="Improvement"/> Improvement</label><br/><br/>
+<p>5. "Determine" means...</p>
+<label><input name="q5" type="radio" value="To ignore"/> To ignore</label><br/>
+<label><input name="q5" type="radio" value="To observe"/> To observe</label><br/>
+<label><input name="q5" type="radio" value="To decide or define"/> To decide or define</label><br/>
+<label><input name="q5" type="radio" value="To leave"/> To leave</label><br/><br/>
+<p>6. Which word is related to society?</p>
+<label><input name="q6" type="radio" value="Community"/> Community</label><br/>
+<label><input name="q6" type="radio" value="Challenge"/> Challenge</label><br/>
+<label><input name="q6" type="radio" value="Environment"/> Environment</label><br/>
+<label><input name="q6" type="radio" value="Determine"/> Determine</label><br/><br/>
+<button onclick="checkQuiz('form4', 'quizResult4')" style="margin-top: 20px; padding: 10px 20px;" type="button">Finish Quiz</button>
+<p class="quiz-result" id="quizResult4" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<!-- Her dil için quiz ve kelime kartları bu şekilde devam ediyor. Son kısımda da okuma parçası bulunuyor -->
+<!-- İngilizce okuma parçası -->
+<section class="section" id="reading-en">
+<h2>📖 Reading – English (Mixed Level)</h2>
+<div style="line-height: 1.6; background: #f9f9f9; padding: 20px; border-radius: 12px; max-width: 800px; margin: 0 auto;">
+<p>Emma was a curious girl who lived in a small town near the forest.</p>
+<p>She loved to read books, especially stories about animals and adventures.</p>
+<p>One sunny morning, she woke up early and packed her backpack with a sandwich, water, a flashlight, and her favorite book.</p>
+<p>She told her mother she would go explore the nearby woods.</p>
+<p>Emma had always wondered what lived beyond the tall oak trees at the edge of town.</p>
+<p>Birds were singing as she walked down the narrow path, and squirrels ran across the trees.</p>
+<p>Suddenly, she heard a rustle in the bushes.</p>
+<p>Out came a little fox with bright orange fur and curious eyes.</p>
+<p>Emma sat quietly and watched the fox sniff around.</p>
+<p>To her surprise, the fox didn’t run away but instead sat a few meters away from her.</p>
+<p>She slowly took out a piece of her sandwich and placed it on a flat rock nearby.</p>
+<p>The fox approached carefully, sniffed it, and took a small bite.</p>
+<p>Emma smiled and opened her book, reading aloud in a soft voice.</p>
+<p>The fox stayed there, listening—or so it seemed.</p>
+<p>For hours, Emma read stories about animals who became friends with humans.</p>
+<p>As the sun began to set, the fox stood up and slowly walked away, disappearing into the trees.</p>
+<p>Emma packed her things and began walking back home, her heart full of joy.</p>
+<p>When she returned, she told her mother everything that had happened.</p>
+<p>That night, she wrote about her experience in her journal and drew a picture of the fox.</p>
+<p>The next morning, Emma went back to the same spot with another sandwich and her journal.</p>
+<p>The fox returned, and this time, it came a little closer.</p>
+<p>This became their daily routine.</p>
+<p>Emma named the fox “Rusty” because of his beautiful color.</p>
+<p>She even wrote short stories about their friendship and shared them with her classmates.</p>
+<p>One day, her teacher read one aloud in class, and everyone clapped.</p>
+<p>Emma felt proud and happy.</p>
+<p>As the months passed, the fox visited less often, but Emma still went to the forest to write and read.</p>
+<p>She never stopped believing in the magic of nature and stories.</p>
+<p>Reading had brought her not only knowledge but a special connection to the world around her.</p>
+<p>Even years later, as a grown-up writer, Emma often told people about her first listener—Rusty the fox.</p>
+<p>And somewhere in the woods, perhaps, Rusty still remembered the girl who read him stories under the trees.</p>
+<p>Books, she always said, can open doors to unexpected friendships and unforgettable memories.</p>
+<p>That’s why she kept writing—and reading—every single day.</p>
+</div>
+</section>
+<section class="section" id="cards-de-beginner">
+<h2>📚 Almanca – Başlangıç Kelime Kartları</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu bölüm, Almanca öğrenmeye yeni başlayanlar için günlük hayatta sıkça kullanılan temel kelimeleri içerir.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Haus</strong></p><p>Ev</p></div>
+<div class="lang-card"><p><strong>Buch</strong></p><p>Kitap</p></div>
+<div class="lang-card"><p><strong>Hund</strong></p><p>Köpek</p></div>
+<div class="lang-card"><p><strong>Tisch</strong></p><p>Masa</p></div>
+<div class="lang-card"><p><strong>Stuhl</strong></p><p>Sandalye</p></div>
+<div class="lang-card"><p><strong>Wasser</strong></p><p>Su</p></div>
+<div class="lang-card"><p><strong>Sonne</strong></p><p>Güneş</p></div>
+<div class="lang-card"><p><strong>Apfel</strong></p><p>Elma</p></div>
+<div class="lang-card"><p><strong>Freund</strong></p><p>Arkadaş</p></div>
+<div class="lang-card"><p><strong>Schule</strong></p><p>Okul</p></div>
+</div>
+</section>
+<section class="section" id="quiz-de-beginner">
+<h2>🧠 Almanca – Başlangıç Seviyesi Sınav</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu mini sınav, Almanca'da temel kelime bilginizi test etmeniz için hazırlanmıştır.<br/>
+    Hazırsanız başlayalım!
+  </p>
+<form name="form5">
+<p>1. Was bedeutet „Haus“?</p>
+<label><input name="q1" type="radio" value="Su"/> Su</label><br/>
+<label><input name="q1" type="radio" value="Ev"/> Ev</label><br/>
+<label><input name="q1" type="radio" value="Kitap"/> Kitap</label><br/>
+<label><input name="q1" type="radio" value="Masa"/> Masa</label><br/><br/>
+<p>2. Was ist „Apfel“ auf Türkisch?</p>
+<label><input name="q2" type="radio" value="Elma"/> Elma</label><br/>
+<label><input name="q2" type="radio" value="Güneş"/> Güneş</label><br/>
+<label><input name="q2" type="radio" value="Kedi"/> Kedi</label><br/>
+<label><input name="q2" type="radio" value="Araba"/> Araba</label><br/><br/>
+<p>3. Wähle die richtige Übersetzung für „Freund“.</p>
+<label><input name="q3" type="radio" value="Su"/> Su</label><br/>
+<label><input name="q3" type="radio" value="Arkadaş"/> Arkadaş</label><br/>
+<label><input name="q3" type="radio" value="Kalem"/> Kalem</label><br/>
+<label><input name="q3" type="radio" value="Ev"/> Ev</label><br/><br/>
+<p>4. Was heißt „Hund“?</p>
+<label><input name="q4" type="radio" value="Köpek"/> Köpek</label><br/>
+<label><input name="q4" type="radio" value="Kedi"/> Kedi</label><br/>
+<label><input name="q4" type="radio" value="Kuş"/> Kuş</label><br/>
+<label><input name="q4" type="radio" value="Balık"/> Balık</label><br/><br/>
+<p>5. Was bedeutet „Schule“?</p>
+<label><input name="q5" type="radio" value="Masa"/> Masa</label><br/>
+<label><input name="q5" type="radio" value="Okul"/> Okul</label><br/>
+<label><input name="q5" type="radio" value="Sandalye"/> Sandalye</label><br/>
+<label><input name="q5" type="radio" value="Kitap"/> Kitap</label><br/><br/>
+<p>6. Wähle die richtige Antwort: „Sonne“ bedeutet?</p>
+<label><input name="q6" type="radio" value="Güneş"/> Güneş</label><br/>
+<label><input name="q6" type="radio" value="Ay"/> Ay</label><br/>
+<label><input name="q6" type="radio" value="Yıldız"/> Yıldız</label><br/>
+<label><input name="q6" type="radio" value="Bulut"/> Bulut</label><br/><br/>
+<button onclick="checkQuiz('form5', 'quizResult5')" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;" type="button">Sınavı Bitir</button>
+<p class="quiz-result" id="quizResult5" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<section class="section" id="cards-de-intermediate">
+<h2>📚 Deutsch – Wortschatz Mittelstufe</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu orta seviye kelimeler günlük durumlarda daha iyi iletişim kurmanıza yardımcı olacaktır.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Reise</strong></p><p>Seyahat</p></div>
+<div class="lang-card"><p><strong>Entscheidung</strong></p><p>Karar</p></div>
+<div class="lang-card"><p><strong>Meinung</strong></p><p>Görüş</p></div>
+<div class="lang-card"><p><strong>Verbessern</strong></p><p>Geliştirmek</p></div>
+<div class="lang-card"><p><strong>Bequem</strong></p><p>Rahat</p></div>
+<div class="lang-card"><p><strong>Überraschung</strong></p><p>Sürpriz</p></div>
+<div class="lang-card"><p><strong>Leihen</strong></p><p>Ödünç almak</p></div>
+<div class="lang-card"><p><strong>Bevorzugen</strong></p><p>Tercih etmek</p></div>
+<div class="lang-card"><p><strong>Einladung</strong></p><p>Davet</p></div>
+<div class="lang-card"><p><strong>Notwendig</strong></p><p>Gerekli</p></div>
+</div>
+</section>
+<section class="section" id="quiz-de-intermediate">
+<h2>🧠 Deutsch – Mittelstufe Quiz</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Ortaokul kelimeleri ile ilgili bu altı soruyla bilginizi test edin.
+  </p>
+<form name="form6">
+<p>1. Was bedeutet „Reise“?</p>
+<label><input name="q1" type="radio" value="Kalem"/> Kalem</label><br/>
+<label><input name="q1" type="radio" value="Seyahat"/> Seyahat</label><br/>
+<label><input name="q1" type="radio" value="Güneş"/> Güneş</label><br/>
+<label><input name="q1" type="radio" value="Kitap"/> Kitap</label><br/><br/>
+<p>2. „Leihen“ heißt...</p>
+<label><input name="q2" type="radio" value="Satın almak"/> Satın almak</label><br/>
+<label><input name="q2" type="radio" value="Ödünç almak"/> Ödünç almak</label><br/>
+<label><input name="q2" type="radio" value="Kaybetmek"/> Kaybetmek</label><br/>
+<label><input name="q2" type="radio" value="Kapatmak"/> Kapatmak</label><br/><br/>
+<p>3. Was ist das Gegenteil von „Notwendig“?</p>
+<label><input name="q3" type="radio" value="Wichtig"/> Wichtig</label><br/>
+<label><input name="q3" type="radio" value="Optional"/> Optional</label><br/>
+<label><input name="q3" type="radio" value="Schnell"/> Schnell</label><br/>
+<label><input name="q3" type="radio" value="Langsam"/> Langsam</label><br/><br/>
+<p>4. Was heißt „Bevorzugen“?</p>
+<label><input name="q4" type="radio" value="Vermek"/> Vermek</label><br/>
+<label><input name="q4" type="radio" value="Tercih etmek"/> Tercih etmek</label><br/>
+<label><input name="q4" type="radio" value="Kapatmak"/> Kapatmak</label><br/>
+<label><input name="q4" type="radio" value="Göstermek"/> Göstermek</label><br/><br/>
+<p>5. „Meinung“ bedeutet...</p>
+<label><input name="q5" type="radio" value="Görüş"/> Görüş</label><br/>
+<label><input name="q5" type="radio" value="Bilgi"/> Bilgi</label><br/>
+<label><input name="q5" type="radio" value="Davet"/> Davet</label><br/>
+<label><input name="q5" type="radio" value="Yemek"/> Yemek</label><br/><br/>
+<p>6. Was ist eine „Überraschung“?</p>
+<label><input name="q6" type="radio" value="Sürpriz"/> Sürpriz</label><br/>
+<label><input name="q6" type="radio" value="Ziyaret"/> Ziyaret</label><br/>
+<label><input name="q6" type="radio" value="Yazı"/> Yazı</label><br/>
+<label><input name="q6" type="radio" value="Müzik"/> Müzik</label><br/><br/>
+<button onclick="checkQuiz('form6', 'quizResult6')" style="margin-top: 20px; padding: 10px 20px;" type="button">Quiz abschließen</button>
+<p class="quiz-result" id="quizResult6" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<section class="section" id="cards-de-advanced">
+<h2>📚 Deutsch – Fortgeschrittene Wortschatz</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu ileri seviye kelimeler kelime dağarcığınızı üst seviyeye çıkarmanıza yardımcı olacaktır.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Errungenschaft</strong></p><p>Başarı</p></div>
+<div class="lang-card"><p><strong>Verstehen</strong></p><p>Anlamak</p></div>
+<div class="lang-card"><p><strong>Beweis</strong></p><p>Kanıt</p></div>
+<div class="lang-card"><p><strong>Unabhängigkeit</strong></p><p>Bağımsızlık</p></div>
+<div class="lang-card"><p><strong>Bestimmen</strong></p><p>Belirlemek</p></div>
+<div class="lang-card"><p><strong>Gesellschaft</strong></p><p>Toplum</p></div>
+<div class="lang-card"><p><strong>Herausforderung</strong></p><p>Zorluk</p></div>
+<div class="lang-card"><p><strong>Umwelt</strong></p><p>Çevre</p></div>
+<div class="lang-card"><p><strong>Tradition</strong></p><p>Gelenek</p></div>
+<div class="lang-card"><p><strong>Gemeinschaft</strong></p><p>Topluluk</p></div>
+</div>
+</section>
+<section class="section" id="quiz-de-advanced">
+<h2>🧠 Deutsch – Fortgeschrittene Quiz</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu altı ileri seviye kelime bilgisi sorusuyla bilginizi test edin.
+  </p>
+<form name="form7">
+<p>1. Was bedeutet „Errungenschaft“?</p>
+<label><input name="q1" type="radio" value="Gelenek"/> Gelenek</label><br/>
+<label><input name="q1" type="radio" value="Başarı"/> Başarı</label><br/>
+<label><input name="q1" type="radio" value="Toplum"/> Toplum</label><br/>
+<label><input name="q1" type="radio" value="Zorluk"/> Zorluk</label><br/><br/>
+<p>2. „Umwelt“ heißt...</p>
+<label><input name="q2" type="radio" value="Çevre"/> Çevre</label><br/>
+<label><input name="q2" type="radio" value="Zemin"/> Zemin</label><br/>
+<label><input name="q2" type="radio" value="Dağ"/> Dağ</label><br/>
+<label><input name="q2" type="radio" value="Su"/> Su</label><br/><br/>
+<p>3. Was ist das Gegenteil von „Unabhängigkeit“?</p>
+<label><input name="q3" type="radio" value="Bağlılık"/> Bağlılık</label><br/>
+<label><input name="q3" type="radio" value="Gelenek"/> Gelenek</label><br/>
+<label><input name="q3" type="radio" value="Topluluk"/> Topluluk</label><br/>
+<label><input name="q3" type="radio" value="Kanıt"/> Kanıt</label><br/><br/>
+<p>4. Was bedeutet „Beweis“?</p>
+<label><input name="q4" type="radio" value="Sürpriz"/> Sürpriz</label><br/>
+<label><input name="q4" type="radio" value="Kanıt"/> Kanıt</label><br/>
+<label><input name="q4" type="radio" value="Bilgi"/> Bilgi</label><br/>
+<label><input name="q4" type="radio" value="Gelişim"/> Gelişim</label><br/><br/>
+<p>5. „Herausforderung“ bedeutet...</p>
+<label><input name="q5" type="radio" value="Zorluk"/> Zorluk</label><br/>
+<label><input name="q5" type="radio" value="Güzellik"/> Güzellik</label><br/>
+<label><input name="q5" type="radio" value="Kolaylık"/> Kolaylık</label><br/>
+<label><input name="q5" type="radio" value="Hız"/> Hız</label><br/><br/>
+<p>6. Was heißt „Gesellschaft“?</p>
+<label><input name="q6" type="radio" value="Toplum"/> Toplum</label><br/>
+<label><input name="q6" type="radio" value="Topluluk"/> Topluluk</label><br/>
+<label><input name="q6" type="radio" value="Grup"/> Grup</label><br/>
+<label><input name="q6" type="radio" value="Aile"/> Aile</label><br/><br/>
+<button onclick="checkQuiz('form7', 'quizResult7')" style="margin-top: 20px; padding: 10px 20px;" type="button">Quiz abschließen</button>
+<p class="quiz-result" id="quizResult7" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<section class="section" id="reading-de">
+<h2>📖 Leseverstehen – Deutsch (Gemischtes Niveau)</h2>
+<div style="line-height: 1.6; background: #f9f9f9; padding: 20px; border-radius: 12px; max-width: 800px; margin: 0 auto;">
+<p>Leo war ein neugieriger Junge, der in einem kleinen Dorf in Bayern lebte.</p>
+<p>Er liebte die Natur, vor allem den Wald hinter seinem Haus.</p>
+<p>Jeden Samstagmorgen stand er früh auf, zog seine Wanderschuhe an und nahm einen Rucksack mit.</p>
+<p>Darin waren ein Apfel, Wasser, ein Notizbuch und sein Lieblingsbuch über Tiere.</p>
+<p>Leo ging in den Wald, um Tiere zu beobachten und Geräusche zu notieren.</p>
+<p>Eines Tages hörte er ein Rascheln im Laub.</p>
+<p>Langsam drehte er sich um und sah ein Reh, das ihn neugierig anschaute.</p>
+<p>Er bewegte sich nicht, sondern beobachtete das Tier still.</p>
+<p>Nach einigen Minuten verschwand das Reh wieder zwischen den Bäumen.</p>
+<p>Leo schrieb sofort alles in sein Notizbuch.</p>
+<p>Er zeichnete das Reh und beschrieb seine Gefühle.</p>
+<p>„Ich war ruhig, aber mein Herz schlug schnell“, schrieb er.</p>
+<p>Später traf er auf einen alten Förster, der ihm Pflanzen erklärte.</p>
+<p>Leo hörte aufmerksam zu und stellte viele Fragen.</p>
+<p>„Wissen ist überall, man muss nur genau hinsehen“, sagte der Förster.</p>
+<p>Leo mochte diesen Satz sehr.</p>
+<p>Am Abend erzählte er seiner Familie von seinen Erlebnissen.</p>
+<p>Seine Schwester hörte begeistert zu und fragte, ob sie beim nächsten Mal mitkommen dürfe.</p>
+<p>Leo nickte.</p>
+<p>Am nächsten Samstag war es so weit.</p>
+<p>Leo und seine Schwester Lisa machten sich zusammen auf den Weg.</p>
+<p>Sie sahen Eichhörnchen, hörten Vögel singen und entdeckten bunte Blumen.</p>
+<p>Leo erklärte Lisa, wie man Fährten im Boden erkennt.</p>
+<p>Lisa war begeistert und sagte: „Du solltest ein Buch schreiben!“</p>
+<p>Leo lachte, aber die Idee gefiel ihm.</p>
+<p>In den folgenden Wochen schrieb er seine Erlebnisse auf.</p>
+<p>Er bastelte ein kleines Buch mit Zeichnungen, Geschichten und Gedichten über den Wald.</p>
+<p>In der Schule durfte er es der Klasse vorstellen.</p>
+<p>Alle klatschten und der Lehrer lobte ihn sehr.</p>
+<p>Leo war stolz und motiviert, weiterzuschreiben.</p>
+<p>Er nannte sein Buch „Abenteuer im Grünen“.</p>
+<p>Einige Monate später reichte seine Lehrerin das Buch bei einem Jugend-Wettbewerb ein.</p>
+<p>Leo gewann den zweiten Platz!</p>
+<p>Er durfte in eine Bibliothek kommen und sein Buch dort vorstellen.</p>
+<p>Seitdem träumt Leo davon, Autor zu werden.</p>
+<p>Und jedes Mal, wenn er den Wald betritt, nimmt er sein Notizbuch mit.</p>
+<p>Denn dort beginnt für ihn jede gute Geschichte.</p>
+</div>
+</section>
+<section class="section" id="cards-es-beginner">
+<h2>📚 İspanyolca – Başlangıç Kelime Kartları</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu bölüm, İspanyolcaya yeni başlayanlar için günlük hayatta sık kullanılan kelimeleri içerir.<br/>
+    Basit ve etkili bir başlangıç için bu kelimeleri öğrenin!
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Casa</strong></p><p>Ev</p></div>
+<div class="lang-card"><p><strong>Libro</strong></p><p>Kitap</p></div>
+<div class="lang-card"><p><strong>Perro</strong></p><p>Köpek</p></div>
+<div class="lang-card"><p><strong>Sol</strong></p><p>Güneş</p></div>
+<div class="lang-card"><p><strong>Agua</strong></p><p>Su</p></div>
+<div class="lang-card"><p><strong>Silla</strong></p><p>Sandalye</p></div>
+<div class="lang-card"><p><strong>Mesa</strong></p><p>Masa</p></div>
+<div class="lang-card"><p><strong>Escuela</strong></p><p>Okul</p></div>
+<div class="lang-card"><p><strong>Manzana</strong></p><p>Elma</p></div>
+<div class="lang-card"><p><strong>Amigo</strong></p><p>Arkadaş</p></div>
+</div>
+</section>
+<section class="section" id="quiz-es-beginner">
+<h2>🧠 İspanyolca – Başlangıç Seviyesi Sınav</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu mini sınav, temel İspanyolca kelime bilginizi test etmek için hazırlanmıştır.<br/>
+    Hazırsanız başlayalım!
+  </p>
+<form name="form8">
+<p>1. ¿Qué significa "Casa"?</p>
+<label><input name="q1" type="radio" value="Okul"/> Okul</label><br/>
+<label><input name="q1" type="radio" value="Kitap"/> Kitap</label><br/>
+<label><input name="q1" type="radio" value="Ev"/> Ev</label><br/>
+<label><input name="q1" type="radio" value="Masa"/> Masa</label><br/><br/>
+<p>2. ¿Cuál es la traducción de "Libro"?</p>
+<label><input name="q2" type="radio" value="Kalem"/> Kalem</label><br/>
+<label><input name="q2" type="radio" value="Kitap"/> Kitap</label><br/>
+<label><input name="q2" type="radio" value="Kedi"/> Kedi</label><br/>
+<label><input name="q2" type="radio" value="Su"/> Su</label><br/><br/>
+<p>3. "Perro" es...</p>
+<label><input name="q3" type="radio" value="Kedi"/> Kedi</label><br/>
+<label><input name="q3" type="radio" value="Kuş"/> Kuş</label><br/>
+<label><input name="q3" type="radio" value="Köpek"/> Köpek</label><br/>
+<label><input name="q3" type="radio" value="Balık"/> Balık</label><br/><br/>
+<p>4. ¿Qué palabra significa "Güneş"?</p>
+<label><input name="q4" type="radio" value="Luna"/> Luna</label><br/>
+<label><input name="q4" type="radio" value="Sol"/> Sol</label><br/>
+<label><input name="q4" type="radio" value="Estrella"/> Estrella</label><br/>
+<label><input name="q4" type="radio" value="Agua"/> Agua</label><br/><br/>
+<p>5. "Escuela" significa...</p>
+<label><input name="q5" type="radio" value="Okul"/> Okul</label><br/>
+<label><input name="q5" type="radio" value="Masa"/> Masa</label><br/>
+<label><input name="q5" type="radio" value="Sandalye"/> Sandalye</label><br/>
+<label><input name="q5" type="radio" value="Elma"/> Elma</label><br/><br/>
+<p>6. ¿Qué significa "Amigo"?</p>
+<label><input name="q6" type="radio" value="Arkadaş"/> Arkadaş</label><br/>
+<label><input name="q6" type="radio" value="Kalem"/> Kalem</label><br/>
+<label><input name="q6" type="radio" value="Kitap"/> Kitap</label><br/>
+<label><input name="q6" type="radio" value="Ev"/> Ev</label><br/><br/>
+<button onclick="checkQuiz('form8', 'quizResult8')" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;" type="button">Sınavı Bitir</button>
+<p class="quiz-result" id="quizResult8" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<section class="section" id="cards-es-intermediate">
+<h2>📚 Español – Vocabulario Intermedio</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu orta seviye kelimeler günlük durumlarda daha iyi iletişim kurmanıza yardımcı olacaktır.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Viaje</strong></p><p>Seyahat</p></div>
+<div class="lang-card"><p><strong>Decisión</strong></p><p>Karar</p></div>
+<div class="lang-card"><p><strong>Opinión</strong></p><p>Görüş</p></div>
+<div class="lang-card"><p><strong>Mejorar</strong></p><p>Geliştirmek</p></div>
+<div class="lang-card"><p><strong>Cómodo</strong></p><p>Rahat</p></div>
+<div class="lang-card"><p><strong>Sorpresa</strong></p><p>Sürpriz</p></div>
+<div class="lang-card"><p><strong>Pedir prestado</strong></p><p>Ödünç almak</p></div>
+<div class="lang-card"><p><strong>Preferir</strong></p><p>Tercih etmek</p></div>
+<div class="lang-card"><p><strong>Invitación</strong></p><p>Davet</p></div>
+<div class="lang-card"><p><strong>Necesario</strong></p><p>Gerekli</p></div>
+</div>
+</section>
+<section class="section" id="quiz-es-intermediate">
+<h2>🧠 Español – Quiz Nivel Intermedio</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu altı  orta seviye çoktan seçmeli soruyla kelime dağarcığınızı test edin.
+  </p>
+<form name="form9">
+<p>1. ¿Qué significa "Viaje"?</p>
+<label><input name="q1" type="radio" value="Oyun"/> Oyun</label><br/>
+<label><input name="q1" type="radio" value="Seyahat"/> Seyahat</label><br/>
+<label><input name="q1" type="radio" value="Yemek"/> Yemek</label><br/>
+<label><input name="q1" type="radio" value="Güneş"/> Güneş</label><br/><br/>
+<p>2. "Pedir prestado" quiere decir...</p>
+<label><input name="q2" type="radio" value="Vermek"/> Vermek</label><br/>
+<label><input name="q2" type="radio" value="Almak"/> Almak</label><br/>
+<label><input name="q2" type="radio" value="Ödünç almak"/> Ödünç almak</label><br/>
+<label><input name="q2" type="radio" value="Geri vermek"/> Geri vermek</label><br/><br/>
+<p>3. ¿Cuál es el opuesto de "Necesario"?</p>
+<label><input name="q3" type="radio" value="Obligatorio"/> Obligatorio</label><br/>
+<label><input name="q3" type="radio" value="Importante"/> Importante</label><br/>
+<label><input name="q3" type="radio" value="Opcional"/> Opcional</label><br/>
+<label><input name="q3" type="radio" value="Fácil"/> Fácil</label><br/><br/>
+<p>4. ¿Qué palabra significa "Tercih etmek"?</p>
+<label><input name="q4" type="radio" value="Elegir"/> Elegir</label><br/>
+<label><input name="q4" type="radio" value="Preferir"/> Preferir</label><br/>
+<label><input name="q4" type="radio" value="Probar"/> Probar</label><br/>
+<label><input name="q4" type="radio" value="Cambiar"/> Cambiar</label><br/><br/>
+<p>5. ¿Qué significa "Invitación"?</p>
+<label><input name="q5" type="radio" value="Hediye"/> Hediye</label><br/>
+<label><input name="q5" type="radio" value="Davet"/> Davet</label><br/>
+<label><input name="q5" type="radio" value="Konuşma"/> Konuşma</label><br/>
+<label><input name="q5" type="radio" value="Çalışma"/> Çalışma</label><br/><br/>
+<p>6. "Opinión" es...</p>
+<label><input name="q6" type="radio" value="Bilgi"/> Bilgi</label><br/>
+<label><input name="q6" type="radio" value="Görüş"/> Görüş</label><br/>
+<label><input name="q6" type="radio" value="Davet"/> Davet</label><br/>
+<label><input name="q6" type="radio" value="Soru"/> Soru</label><br/><br/>
+<button onclick="checkQuiz('form9', 'quizResult9')" style="margin-top: 20px; padding: 10px 20px;" type="button">Terminar</button>
+<p class="quiz-result" id="quizResult9" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<section class="section" id="cards-es-advanced">
+<h2>📚 Español – Vocabulario Avanzado</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu ileri düzey kelimeler karmaşık metinleri anlamanıza ve karmaşık fikirleri ifade etmenize yardımcı olacaktır.
+  </p>
+<div class="languages">
+<div class="lang-card"><p><strong>Logro</strong></p><p>Başarı</p></div>
+<div class="lang-card"><p><strong>Ambiente</strong></p><p>Çevre</p></div>
+<div class="lang-card"><p><strong>Independencia</strong></p><p>Bağımsızlık</p></div>
+<div class="lang-card"><p><strong>Prueba</strong></p><p>Kanıt</p></div>
+<div class="lang-card"><p><strong>Desafío</strong></p><p>Zorluk</p></div>
+<div class="lang-card"><p><strong>Sociedad</strong></p><p>Toplum</p></div>
+<div class="lang-card"><p><strong>Tradición</strong></p><p>Gelenek</p></div>
+<div class="lang-card"><p><strong>Desarrollo</strong></p><p>Gelişim</p></div>
+<div class="lang-card"><p><strong>Comunicación</strong></p><p>İletişim</p></div>
+<div class="lang-card"><p><strong>Conocimiento</strong></p><p>Bilgi</p></div>
+</div>
+</section>
+<section class="section" id="quiz-es-advanced">
+<h2>🧠 Español – Quiz Nivel Avanzado</h2>
+<p style="margin-bottom: 20px; text-align: center;">
+    Bu altı soruluk ileri seviye kelime bilgisi sınavıyla bilginizi test edin.
+  </p>
+<form name="form10">
+<p>1. ¿Qué significa "Logro"?</p>
+<label><input name="q1" type="radio" value="Zorluk"/> Zorluk</label><br/>
+<label><input name="q1" type="radio" value="Başarı"/> Başarı</label><br/>
+<label><input name="q1" type="radio" value="Toplum"/> Toplum</label><br/>
+<label><input name="q1" type="radio" value="Gelenek"/> Gelenek</label><br/><br/>
+<p>2. "Independencia" quiere decir...</p>
+<label><input name="q2" type="radio" value="Çevre"/> Çevre</label><br/>
+<label><input name="q2" type="radio" value="Bilgi"/> Bilgi</label><br/>
+<label><input name="q2" type="radio" value="Bağımsızlık"/> Bağımsızlık</label><br/>
+<label><input name="q2" type="radio" value="Kanıt"/> Kanıt</label><br/><br/>
+<p>3. ¿Cuál es la traducción de "Desafío"?</p>
+<label><input name="q3" type="radio" value="Zorluk"/> Zorluk</label><br/>
+<label><input name="q3" type="radio" value="İletişim"/> İletişim</label><br/>
+<label><input name="q3" type="radio" value="Gelişim"/> Gelişim</label><br/>
+<label><input name="q3" type="radio" value="Toplum"/> Toplum</label><br/><br/>
+<p>4. "Comunicación" significa...</p>
+<label><input name="q4" type="radio" value="Kanıt"/> Kanıt</label><br/>
+<label><input name="q4" type="radio" value="İletişim"/> İletişim</label><br/>
+<label><input name="q4" type="radio" value="Bağımsızlık"/> Bağımsızlık</label><br/>
+<label><input name="q4" type="radio" value="Gelenek"/> Gelenek</label><br/><br/>
+<p>5. ¿Qué palabra significa "Bilgi"?</p>
+<label><input name="q5" type="radio" value="Desafío"/> Desafío</label><br/>
+<label><input name="q5" type="radio" value="Conocimiento"/> Conocimiento</label><br/>
+<label><input name="q5" type="radio" value="Ambiente"/> Ambiente</label><br/>
+<label><input name="q5" type="radio" value="Sociedad"/> Sociedad</label><br/><br/>
+<p>6. "Sociedad" quiere decir...</p>
+<label><input name="q6" type="radio" value="Toplum"/> Toplum</label><br/>
+<label><input name="q6" type="radio" value="Bilgi"/> Bilgi</label><br/>
+<label><input name="q6" type="radio" value="Kanıt"/> Kanıt</label><br/>
+<label><input name="q6" type="radio" value="Gelişim"/> Gelişim</label><br/><br/>
+<button onclick="checkQuiz('form10', 'quizResult10')" style="margin-top: 20px; padding: 10px 20px;" type="button">Finalizar</button>
+<p class="quiz-result" id="quizResult10" style="font-weight: bold; margin-top: 20px;"></p></form>
+</section>
+<section class="section" id="reading-es">
+<h2>📖 Lectura – Español (Nivel Mixto)</h2>
+<div style="line-height: 1.6; background: #f9f9f9; padding: 20px; border-radius: 12px; max-width: 800px; margin: 0 auto;">
+<p>Mateo era un niño que vivía en un pequeño pueblo cerca del mar.</p>
+<p>Le gustaba levantarse temprano y caminar por la playa con su cuaderno.</p>
+<p>Un día, encontró una botella vieja con un mensaje adentro.</p>
+<p>Decía: “Sigue el sol y encontrarás la historia más grande.”</p>
+<p>Mateo estaba intrigado y decidió investigar.</p>
+<p>Comenzó a observar el sol cada mañana y tomar notas sobre su camino.</p>
+<p>Durante una semana, siguió su recorrido por las colinas, los campos y los árboles.</p>
+<p>En el camino conoció a una anciana que le habló sobre la historia del faro abandonado.</p>
+<p>“Ese faro solía guiar a los barcos perdidos. Ahora, nadie entra allí”, dijo.</p>
+<p>Mateo decidió visitarlo. El faro estaba cubierto de enredaderas, pero aún era fuerte.</p>
+<p>Dentro encontró libros viejos, mapas del mar y un diario con dibujos.</p>
+<p>El diario era de un marinero que había vivido aventuras por todo el mundo.</p>
+<p>Había escrito sobre tormentas, delfines, tesoros escondidos y amistad verdadera.</p>
+<p>Mateo se sentó en el suelo y comenzó a leer durante horas.</p>
+<p>Se sintió como si viajara con el marinero.</p>
+<p>Cuando regresó a casa, escribió en su cuaderno: “He encontrado la historia más grande.”</p>
+<p>Desde ese día, iba al faro cada tarde a leer y escribir.</p>
+<p>Soñaba con ser escritor y contar sus propias aventuras algún día.</p>
+<p>Pasaron los meses, y Mateo escribió cuentos sobre sus caminatas, el mar y sus sueños.</p>
+<p>Un día, su maestra leyó uno de sus cuentos en clase y todos aplaudieron.</p>
+<p>Mateo sonrió y dijo: “Todo comenzó con un rayo de sol.”</p>
+<p>Su historia se publicó en el periódico local y su familia estaba orgullosa de él.</p>
+<p>El faro, una vez olvidado, ahora era un lugar lleno de historias y esperanza.</p>
+<p>Mateo seguía escribiendo, leyendo y soñando, porque sabía que cada día traía una nueva aventura.</p>
+<p>Y cada historia comenzaba con una palabra y un poco de imaginación.</p>
+</div>
+</section>
+<footer>
+  © 2025 LinguaZone – Tüm Hakları Saklıdır
+</footer>
+<!-- Seçilen dil, seviye ve bölüme göre ilgili içeriği dinamik olarak gösteren script -->
+<script>
+  let selectedLanguage = '';
+  let selectedLevel = '';
+
+  const dropdown = document.querySelector('select');
+
+  // Dil seçildiğinde
+  document.querySelectorAll('#language-select .lang-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedLanguage = card.getAttribute('data-lang');
+      document.querySelectorAll('#language-select .lang-card').forEach(c => c.classList.remove('selected-lang'));
+      card.classList.add('selected-lang');
+      updateContent();
+    });
+  });
+
+  // Seviye seçildiğinde
+  document.querySelectorAll('#level-cards .lang-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedLevel = card.getAttribute('data-level');
+      document.querySelectorAll('#level-cards .lang-card').forEach(c => c.classList.remove('selected-level'));
+      card.classList.add('selected-level');
+      updateContent();
+    });
+  });
+
+  dropdown.addEventListener('change', updateContent);
+
+  function updateContent() {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+
+    let targetId = '';
+    if (dropdown.value === 'reading') {
+      if (selectedLanguage) {
+        targetId = `reading-${selectedLanguage}`;
+      }
+    } else {
+      if (selectedLanguage && selectedLevel) {
+        targetId = `${dropdown.value}-${selectedLanguage}-${selectedLevel}`;
+      }
+    }
+
+    if (targetId) {
+      const target = document.getElementById(targetId);
+      if (target) target.classList.add('active');
+    }
+  }
+</script>
+<!-- Seçilen bölüme göre dil ve seviye seçim alanlarını gösterip gizleyen script -->
+<script>
+  const selector = document.querySelector('nav select');
+  const lang = document.getElementById('language-select');
+  const level = document.getElementById('level-cards');
+
+  selector.addEventListener('change', function () {
+    const selected = this.value;
+
+    if (["cards", "quiz", "reading"].includes(selected)) {
+      lang.style.display = "flex";
+      level.style.display = "block";
+    } else {
+      lang.style.display = "none";
+      level.style.display = "none";
+    }
+    });
+</script>
+<!-- Seçilen bölüme göre dil ve seviye kartlarını gösterip, ana sayfa bölümlerini gizleyen script -->
+<script>
+  const bolumSecimi = document.querySelector('nav select');
+  const dilKartlari = document.getElementById('language-select');
+  const seviyeKartlari = document.getElementById('level-cards');
+  const anasayfaAvantajlar = document.getElementById('homepage-advantages');
+  const anasayfaYorumlar = document.getElementById('homepage-testimonials');
+
+  bolumSecimi.addEventListener('change', function () {
+    const secilenBolum = this.value;
+
+    if (["cards", "quiz", "reading"].includes(secilenBolum)) {
+      dilKartlari.style.display = "flex";
+      seviyeKartlari.style.display = "block";
+      anasayfaAvantajlar.style.display = "none";
+      anasayfaYorumlar.style.display = "none";
+    } else {
+      dilKartlari.style.display = "none";
+      seviyeKartlari.style.display = "none";
+      anasayfaAvantajlar.style.display = "block";
+      anasayfaYorumlar.style.display = "block";
+    }
+  });
+</script>
+<!-- Sınavlarda doğru cevap sayısını hesaplayan ve tam doğruysa tebrik mesajı gösteren script -->
+<script>
+function checkQuiz(formId, resultId) {
+  const form = document.getElementById(resultId).closest("form");
+  const resultContainer = document.getElementById(resultId);
+  let correct = 0;
+  const allQuestions = new Set();
+  form.querySelectorAll("input[type=radio]").forEach(input => {
+    allQuestions.add(input.name);
+  });
+  allQuestions.forEach(name => {
+    const selected = form.querySelector(`input[name='${name}']:checked`);
+    if (selected && selected.value === "correct") {
+      correct++;
+    }
+  });
+  resultContainer.textContent = `✔️ Doğru Sayısı: ${correct} / ${allQuestions.size}`;
+  if (correct === allQuestions.size) {
+    resultContainer.textContent += "\n🎉 Tebrikler! Sonraki seviyeye geçmeye hazırsınız.";
+  }
+}
+</script>
+<!-- Sınav formundaki cevapları kontrol edip doğru sayısını ve sonucu gösteren script -->
+<script>
+function checkQuiz(formName, resultId) {
+  const correctAnswers = {
+    "form1": ["Kitap", "Ev", "Apple", "Water", "Arkadaş", "Hot"],
+    "form2": ["Seyahat", "Ödünç almak", "Optional", "Prefer", "Davet", "Görüş"],
+    "form3": ["Success", "To understand", "Evidence", "Dependence", "To decide or define", "Community"],
+    "form4": ["Success", "To understand", "Evidence", "Dependence", "To decide or define", "Community"],
+    "form5": ["Ev", "Elma", "Arkadaş", "Köpek", "Okul", "Güneş"],
+    "form6": ["Seyahat", "Ödünç almak", "Optional", "Tercih etmek", "Görüş", "Sürpriz"],
+    "form7": ["Başarı", "Çevre", "Bağlılık", "Kanıt", "Zorluk", "Toplum"],
+    "form8": ["Ev", "Kitap", "Köpek", "Sol", "Okul", "Arkadaş"],
+    "form9": ["Seyahat", "Ödünç almak", "Opcional", "Preferir", "Davet", "Görüş"],
+    "form10": ["Başarı", "Bağımsızlık", "Zorluk", "İletişim", "Bilgi", "Toplum"]
+  };
+
+  const form = document.forms[formName];
+  const correct = correctAnswers[formName];
+  let score = 0;
+
+  for (let i = 1; i <= correct.length; i++) {
+    const answer = form.querySelector('input[name="q' + i + '"]:checked');
+    if (answer && answer.value === correct[i - 1]) {
+      score++;
+    }
+  }
+
+  const resultText = score === correct.length
+    ? `✔️ Tebrikler! ${score} / ${correct.length} doğru yaptınız. Bir sonraki seviye için hazırsınız!`
+    : `✔️ Doğru Sayısı: ${score} / ${correct.length}`;
+  document.getElementById(resultId).textContent = resultText;
+}
+</script>
+<!-- Video bölümü seçildiğinde ana sayfa bölümlerini gizleyen script -->
+<script>
+document.querySelector('select').addEventListener('change', function() {
+  const selected = this.value;
+  const advantages = document.getElementById('homepage-advantages');
+  const testimonials = document.getElementById('homepage-testimonials');
+
+  if (selected === 'video') {
+    if (advantages) advantages.style.display = 'none';
+    if (testimonials) testimonials.style.display = 'none';
+  } else {
+    if (advantages) advantages.style.display = '';
+    if (testimonials) testimonials.style.display = '';
+  }
+});
+</script>
+<!-- Sadece video bölümü seçildiğinde video içeriğini gösteren script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const selector = document.querySelector("select");
+  const video = document.getElementById("video");
+  if (!selector || !video) return;
+
+  function toggleVideoVisibility() {
+    video.style.display = selector.value === "video" ? "block" : "none";
+  }
+
+  selector.addEventListener("change", toggleVideoVisibility);
+  toggleVideoVisibility(); 
+});
+</script>
+</body>
+</html>
